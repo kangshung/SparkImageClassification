@@ -16,12 +16,13 @@ object OpenCV {
   }
 
   def main(args: Array[String]): Unit = {
-    val input = "/photos/bright"
+    val input = "/photos/images"
 
-    val sources = new File(input).listFiles.toList
+    val sources = new File(input).listFiles.par
     val values = sources.map(x => findV(x.toString).floor)
 
     println(sources)
     println(values)
+    println(values.length)
   }
 }
