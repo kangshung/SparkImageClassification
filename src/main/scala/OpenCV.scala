@@ -33,14 +33,16 @@ object OpenCV {
         val extension = x.split("\\.")
         val filename = extension(0).split("/")
         val outFolder = if (!output.endsWith("/")) output + "/" else output
-        outFolder + filename(1) + "_" + label + "_" + value + "." + extension(1)
+        outFolder + filename.last + "_" + label + "_" + value + "." + extension(1)
       })
   }
 
   def main(args: Array[String]): Unit = {
+    val projectPath = System.getProperty("user.dir")
     val config = ConfigFactory.load()
-    val input = config.getString("conf.in")
-    val output = config.getString("conf.out")
+
+    val input = projectPath + config.getString("conf.in")
+    val output = projectPath + config.getString("conf.out")
 
     val sources = readPhotoPaths(input)
     val taggedSources = createNewPaths(sources, output, args)
