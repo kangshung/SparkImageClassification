@@ -1,9 +1,14 @@
 import java.io.File
+import java.nio.file.{Files, Paths, StandardCopyOption}
 
-import com.typesafe.config._
+import com.typesafe.config.ConfigFactory
+
 import org.opencv.core.Core.{NATIVE_LIBRARY_NAME, mean}
 import org.opencv.imgcodecs.Imgcodecs.imread
 import org.opencv.imgproc.Imgproc.{COLOR_BGR2HSV, cvtColor}
+
+import scala.collection.parallel.mutable.ParArray
+
 
 object OpenCV {
   System.loadLibrary(NATIVE_LIBRARY_NAME)
@@ -16,23 +21,34 @@ object OpenCV {
     normalizedV.toInt
   }
 
+  def readPhotoPaths(input: String): ParArray[String] = {
+    new File(input).listFiles.par.map(x => x.toString)
+  }
+
+  def createNewPaths(sources: ParArray[String], output: String, threshold: Array[String]): ParArray[String] = {
+    sources.map(
+      x => {
+        val value = findV(x)
+        val label = if (value >= threshold(0).toInt) "dark" else "bright"
+        val extension = x.split("\\.")
+        val filename = extension(0).split("/")
+        val outFolder = if (!output.endsWith("/")) output + "/" else output
+        outFolder + filename(1) + "_" + label + "_" + value + "." + extension(1)
+      })
+  }
+
   def main(args: Array[String]): Unit = {
+    val config = ConfigFactory.load()
+    val input = config.getString("conf.in")
+    val output = config.getString("conf.out")
 
-    val conf = ConfigFactory.load()
-    val input = conf.getString("conf.in")
-    val output = conf.getString("conf.out")
+    val sources = readPhotoPaths(input)
+    val taggedSources = createNewPaths(sources, output, args)
 
-    val sources = new File(input).listFiles.par.map(x => x.toString)
-
-    val z = sources.map(x => {
-      val value = findV(x)
-      val label = if (value >= args(0).toInt) "dark" else "bright"
-      val name = x.split("\\.", 2)
-      name(0).concat("_" + label + "_" + value + "." + name(1))
+    //Copies images from the 'in' to the 'out' folder (specified in the reference.conf)
+    sources.zip(taggedSources).map({
+      case (x, y) =>
+        Files.copy(Paths.get(x), Paths.get(y), StandardCopyOption.REPLACE_EXISTING)
     })
-
-
-    println(z)
-    println(z.length)
   }
 }
