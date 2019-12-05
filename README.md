@@ -3,11 +3,11 @@
 
 ---
 
-The application consists of 1 Scala object called *OpenCV* in the OpenCV.scala file. It is built on the sbt tool, java 1.8.0 openjdk, scala 2.11.12 (due to Spark 2.4.4).
+The application consists of 1 Scala object called *OpenCV* in the OpenCV.scala file. It is built on the sbt tool, Java 1.8.0 openjdk, Scala 2.11.12.
 
 After cloning, ```sbt "run 75" ``` command runs the program => photos with attached metadata are copied from the **in** to the **out** directory.
 
-In and out directories can be changed in the reference.conf file.
+In and out directories can be changed in the **reference.conf** file. Prior installation of the OpenCV for Java may be needed. File **libopencv_java412.so** to be put in the java.library.path is in the repository.
 
 ---
 
