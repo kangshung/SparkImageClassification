@@ -38,11 +38,10 @@ object OpenCV {
   }
 
   def main(args: Array[String]): Unit = {
-    val projectPath = System.getProperty("user.dir")
     val config = ConfigFactory.load()
 
-    val input = projectPath + config.getString("conf.in")
-    val output = projectPath + config.getString("conf.out")
+    val input = config.getString("conf.in")
+    val output = config.getString("conf.out")
 
     val sources = readPhotoPaths(input)
     val taggedSources = createNewPaths(sources, output, args)

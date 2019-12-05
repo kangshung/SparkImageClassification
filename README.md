@@ -7,6 +7,8 @@ The application consists of 1 Scala object called *OpenCV* in the OpenCV.scala f
 
 After cloning, ```sbt "run 75" ``` command runs the program => photos with attached metadata are copied from the **in** to the **out** directory.
 
+In and out directories can be changed in the reference.conf file.
+
 ---
 
 At the beginning, I tried Scala and Python versions of Apache Spark DataFrame API to obtain a distributed application but as I figured out that loading
