@@ -1,13 +1,14 @@
 # Are you afraid of the dark?
-##### Damian FiÅ‚onowicz
+##### Damian Fi³onowicz
 
 ---
-
-The application consists of 1 Scala object called *OpenCV* in the OpenCV.scala file. It is built on the sbt tool, Java 1.8.0 openjdk, Scala 2.11.12.
+The goal of the project was to classify photos into 2 classes - bight & dark - according to their brightness level. The application's main code is in the
+*src/main/scala/OpenCV.scala* file. It a Spark application written with a DataFrame API in *Scala* with the use of the *bytedeco OpenCV* library for Java and built
+on the *sbt* tool.
 
 After cloning, ```sbt "run 75" ``` command runs the program => photos with attached metadata are copied from the **in** to the **out** directory.
-
-In and out directories can be changed in the **reference.conf** file. Prior installation of the OpenCV for Java may be needed. File **libopencv_java412.so** to be put in the java.library.path is in the repository.
+In and out directories can be changed in the **reference.conf** file.
+Prior installation of the OpenCV for Java may be needed. The file **libopencv_javaXXX.so** is supposed to be put in the java.library.path.
 
 ---
 
