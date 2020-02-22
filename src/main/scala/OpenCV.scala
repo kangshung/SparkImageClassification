@@ -39,7 +39,7 @@ object OpenCV {
       val label = if (value >= args(0).toInt) "dark" else "bright"
       val extension = path.split("\\.")
       val name = extension(0).split("/").last
-      output + "/" + name + "-" + value + "-" + label + "." + extension(1)
+      output + "/" + name + "_" + value + "_" + label + "." + extension(1)
     }
 
     def classifier_UDF: UserDefinedFunction = udf[String, String, Int](classifier)
