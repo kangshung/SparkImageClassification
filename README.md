@@ -1,33 +1,14 @@
-# Are you afraid of the dark?
-##### Damian Fi³onowicz
+# Spark Image Classification Project
 
 ---
-The goal of the project was to classify photos into 2 classes - bight & dark - according to their brightness level. The application's main code is in the
-*src/main/scala/OpenCV.scala* file. It a Spark application written with a DataFrame API in *Scala* with the use of the *bytedeco OpenCV* library for Java and built
-on the *sbt* tool.
+The goal of the project was to classify photos into 2 classes - bight & dark - according to their brightness level in an efficient and scalable way. The application's main code is in the **src/main/scala/OpenCV.scala** file. It is a Spark application written with a DataFrame API in Scala with the use of the **bytedeco OpenCV** library for Java and built on the sbt tool.
 
-After cloning, ```sbt "run 75" ``` command runs the program => photos with attached metadata are copied from the **in** to the **out** directory.
-In and out directories can be changed in the **reference.conf** file.
-Prior installation of the OpenCV for Java may be needed. The file **libopencv_javaXXX.so** is supposed to be put in the java.library.path.
+After running the program photos with attached metadata (brightness level from 0 to 100 and its class) are copied from the **in** to the **out** directory. There directories can be changed in the **reference.conf** file. Prior installation of the OpenCV for Java may be needed. The file **libopencv_javaXXX.so** is supposed to be put in the java.library.path.
 
 ---
 
-At the beginning, I tried Scala and Python versions of Apache Spark DataFrame API to obtain a distributed application but as I figured out that loading
-photos into Spark is a nightmare and not fully supported I have decided not to follow this idea and focus on other ways of solving the problem.
+Even though it is a classification problem, I have decided not to use any ML algorithm for that. Detecting any patterns in photos was not needed to achieve the goal neither. I have written an algorithm with the OpenCV and managed to get it run in a distributed way on the Spark cluster.
 
-Even though I have known since the beginning that the task is a classification problem, I have not used any ML algorithm for that. Detecting any patterns
-on photos was not needed to achieve the goal neither. I have written an algorithm with the
-[OpenCV library for Java](https://opencv-java-tutorials.readthedocs.io/en/latest/01-installing-opencv-for-java.html#install-opencv-3-x-under-linux),
-official library [here](https://opencv.org/).
-I used functions for reading pictures as an RGB [Mat](https://docs.opencv.org/master/d3/d63/classcv_1_1Mat.html) or Java version
-[here](https://docs.opencv.org/master/javadoc/org/opencv/core/Mat.html). Then, converted them to the HSV format.
-[HSV](https://en.wikipedia.org/wiki/HSL_and_HSV) (or HSL) is an alternative that can be calculated from RGB and points out the **H**ue,
-**S**aturation, and **V**alue (lightness) of the pixel. The average value of the photo is an indicator how bright it is.
+The algorithm transforms photos from the RGB format to the HSV one. The average (V)alue of the photo is an indicator how bright it is. Thanks to this, after the normalization of the value score to the 0-100 range, photos can be correctly classified into 2 classes with almost a 20-score-point margin.
 
-Thanks to this, after normalization of the value score to the 0-100 range, photos can be correctly classified into 2 classes as in the task. Demo images can be split
-with almost 20-score-point margin. It means that any value between **64** and **83** can positively differentiate **every** bright picture from the "too dark" ones.
-However, picking a higher threshold could not be problem since most of "too dark" pictures are in the area of 93-99 score. It means that the application should
-work for any other pictures.
-
-The application uses parallel **ParArray** collections that boost its speed. It can be further expanded via real thread-level parallelism or by doing
-calculations at least partially on a distributed framework like Spark, or with Akka.
+The user needs to choose a classification threshold, however, it should not be problem since most of "dark" pictures are in the area of 93-99.
