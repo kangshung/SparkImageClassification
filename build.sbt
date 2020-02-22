@@ -1,6 +1,6 @@
 name := "AreYouAfraidOfTheDark"
 
-version := "0.4"
+version := "1"
 
 scalaVersion := "2.11.12"
 
@@ -15,9 +15,6 @@ libraryDependencies += "org.apache.spark" %% "spark-mllib" % "2.4.5" % "runtime"
 
 // https://mvnrepository.com/artifact/com.typesafe/config
 libraryDependencies += "com.typesafe" % "config" % "1.4.0"
-
-//resolvers += "MMLSpark Repo" at "https://mmlspark.azureedge.net/maven"
-//libraryDependencies += "com.microsoft.ml.spark" %% "mmlspark" % "1.0.0-rc1"
 
 // https://mvnrepository.com/artifact/org.bytedeco/opencv
 libraryDependencies += "org.bytedeco" % "opencv" % "4.1.2-1.5.2"
